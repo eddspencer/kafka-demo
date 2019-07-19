@@ -30,6 +30,7 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
@@ -55,9 +56,17 @@ public class WordCount {
     final StreamsBuilder builder = new StreamsBuilder();
 
     builder.<String, String>stream("streams-plaintext-input")
-        .flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
+        // Flatmap the sentences into words
+        .flatMapValues(value -> {
+          final String lower = value.toLowerCase(Locale.getDefault());
+          final List<String> words = Arrays.asList(lower.split("\\W+"));
+          return words;
+        })
+        // group by word
         .groupBy((key, value) -> value)
-        .count(Materialized.<String, Long, KeyValueStore<Bytes, byte[]>>as("counts-store"))
+        // count words
+        .count(Materialized.as("counts-store"))
+        // save to output
         .toStream().to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
 
     final Topology topology = builder.build();
