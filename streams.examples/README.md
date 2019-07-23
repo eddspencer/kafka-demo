@@ -50,3 +50,28 @@ Producer to input text:
 ```
 bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
 ```
+
+# TF-IDF
+For the TF-IDF example also need that output stream:
+```
+bin/kafka-topics.sh --create \
+    --bootstrap-server localhost:9092 \
+    --replication-factor 1 \
+    --partitions 1 \
+    --topic streams-tfidf-output \
+    --config cleanup.policy=compact
+```
+
+To read that output:
+```
+```
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 \
+    --topic streams-tfidf-output \
+    --from-beginning \
+    --formatter kafka.tools.DefaultMessageFormatter \
+    --property print.key=true \
+    --property print.value=true \
+    --property key.deserializer=org.apache.kafka.common.serialization.StringDeserializer \
+    --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer
+```
+```
