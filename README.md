@@ -57,3 +57,9 @@ Producer to input text:
 ```
 bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
 ```
+
+# Delete Topics
+```
+bin/kafka-topics.sh --delete --bootstrap-server localhost:9092 --topic streams-plaintext-input
+bin/kafka-topics.sh --delete --bootstrap-server localhost:9092 --topic streams-wordcount-output
+```
