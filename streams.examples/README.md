@@ -51,7 +51,7 @@ Producer to input text:
 bin/kafka-console-producer.sh --broker-list localhost:9092 --topic streams-plaintext-input
 ```
 
-# TF-IDF
+# TF-IDF (not working)
 For the TF-IDF example also need that output stream:
 ```
 bin/kafka-topics.sh --create \
